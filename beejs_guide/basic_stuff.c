@@ -25,7 +25,20 @@ void pointers(int* i){
 void arrays(void){
   puts("\narrays");
   float f[4]; 
+  f[0] = 3.1638; f[1] = 1.2345;
+  f[2] = 1.6808; f[3] = 2.7898;
+  for (int i=0; i<4; i++){
+    printf("%f\n",f[i]);
+  }
 
+}
+
+void size_stuff(void){
+  puts("\nsize_stuff");
+  int x[12];
+  printf("%zu\n", sizeof(x));
+  printf("%zu\n", sizeof(int));
+  printf("%zu\n", sizeof(x) / sizeof(int));
 }
 
 
@@ -35,5 +48,6 @@ int main (void){
   bool_stuff();
   pointers(&i);
   arrays();
+  size_stuff();
 
 }
