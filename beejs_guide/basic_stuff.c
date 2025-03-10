@@ -59,6 +59,18 @@ void matrix_stuff(void){
 
 }
 
+void array_pointers(void){
+  puts("\narray_pointers");
+  int a[5] = {1,2,3,4,5};
+  int *p;
+
+  p = &a[0];
+  printf("%d\n",*p);
+  p = a;
+  printf("%d\n",*p);
+
+}
+
 
 int main (void){
   int i = 2;   
@@ -68,5 +80,6 @@ int main (void){
   arrays();
   size_stuff();
   matrix_stuff();
+  array_pointers();
 
 }
