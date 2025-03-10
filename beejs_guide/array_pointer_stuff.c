@@ -25,6 +25,9 @@ int main(void){
   //}
   //my_2d_array(x_2d);
   my_1d_array(x_2d_1d, 2, 3);
+  my_1d_array(x_2d_1d, 3, 2);
+  my_1d_array(x_2d_1d, 6, 1);
+  my_1d_array(x_2d_1d, 1, 6);
   
 }
 
