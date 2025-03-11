@@ -2,21 +2,21 @@
 #include <stdlib.h>
 
 int dot_product(int *a, int *b, int n_size);
-int* matrix_product(int *v, int *M, int *M_size);
+int* vector_matrix_product(int *v, int *M, int *M_size);
 
 
 int main(void){
   //TODO: Make this a struct
-  int n_size = 5;
   int a[5] = {1, 2, 3, 4, 5};
-  int b[5] = {6, 7, 8, 9, 10};
   // Assume this is stuff is already transpossed
-  int M_size[2] = {2,5};
-  int c[10] = {6, 7, 8, 9, 10, 12, 13, 14, 15, 16};
 
+  int n_size = 5;
+  int b[5] = {6, 7, 8, 9, 10};
   printf("dot prod: %d \n", dot_product(a, b, n_size));
 
-  int *result = matrix_product(a, c, M_size);
+  int M_size[2] = {2,5};
+  int c[10] = {6, 7, 8, 9, 10, 12, 13, 14, 15, 16};
+  int *result = vector_matrix_product(a, c, M_size);
   if (result == NULL) puts("Error pointer NULL");
   for (int i=0; i<M_size[0]; i++){
     printf("%d ", result[i]);
@@ -34,7 +34,7 @@ int dot_product(int *a, int *b, int n_size){
   return sum;
 }
 
-int* matrix_product(int *v, int *M, int *M_size){
+int* vector_matrix_product(int *v, int *M, int *M_size){
   // Create vector, must be in heap to not return nonesense stuff
   int *result = (int*) malloc(M_size[0] * sizeof(int));
   if (result == NULL) return NULL;
@@ -42,6 +42,12 @@ int* matrix_product(int *v, int *M, int *M_size){
   printf("M_size[0]: %d | M_size[1]: %d \n", M_size[0], M_size[1]);
   for (int i=0; i < M_size[0]; i++){
     printf("i: %d \n", i);
+    // & this thing because we need the address of the element, and not the element
+    /*
+      This is very important, it means that we only need a way to trasverse the array, give
+      the function the start of the resulting vector and pass it the length we need since we
+      can't slice this thing
+    */
     int *row = &M[i * M_size[1]];
     result[i] = dot_product(v, row, M_size[1]);
   }
