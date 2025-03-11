@@ -11,9 +11,8 @@ typedef struct{
   int n_size[2];
 } Matrix;
 
-int struct_dot_product(Vector a, Vector b);
-Vector struct_vector_matrix_product(Vector v, Matrix M);
-
+int dot_product(Vector a, Vector b);
+Vector vector_matrix_product(Vector v, Matrix M);
 
 
 int main(void){
@@ -36,9 +35,9 @@ int main(void){
   M.data = c;
   M.n_size[0] = 2; M.n_size[1] = 5;
 
-  printf("struct dot prod: %d \n", struct_dot_product(v, f));
+  printf("struct dot prod: %d \n", dot_product(v, f));
 
-  Vector v_result = struct_vector_matrix_product(v, M);
+  Vector v_result = vector_matrix_product(v, M);
   if (v_result.data == NULL) puts("Error pointer struct NULL");
   for (int i=0; i<v_result.n_size; i++){
     printf("%d ", v_result.data[i]);
@@ -47,7 +46,7 @@ int main(void){
 
 }
 
-int struct_dot_product(Vector a, Vector b){
+int dot_product(Vector a, Vector b){
   int sum = 0;
   for (int i=0; i<a.n_size; i++){
     sum += (a.data[i] * b.data[i]);
@@ -56,7 +55,7 @@ int struct_dot_product(Vector a, Vector b){
   return sum;
 }
 
-Vector struct_vector_matrix_product(Vector v, Matrix M){
+Vector vector_matrix_product(Vector v, Matrix M){
   // Create vector, must be in heap to not return nonesense stuff
   Vector result;
   result.n_size = M.n_size[0];
@@ -69,7 +68,7 @@ Vector struct_vector_matrix_product(Vector v, Matrix M){
     Vector row;
     row.data = &M.data[i * M.n_size[1]];
     row.n_size = M.n_size[1];
-    result.data[i] = struct_dot_product(v, row);
+    result.data[i] = dot_product(v, row);
   }
   return result;
 }
