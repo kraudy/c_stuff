@@ -4,14 +4,25 @@
 int dot_product(int *a, int *b, int n_size);
 int* vector_matrix_product(int *v, int *M, int *M_size);
 
+typedef struct {
+  int *data;
+  int n_size;
+} Vector;
 
 int main(void){
   //TODO: Make this a struct
+  Vector v;
+  Vector f;
+
   int a[5] = {1, 2, 3, 4, 5};
+  v.data = a;
+  v.n_size = 5;
   // Assume this is stuff is already transpossed
 
   int n_size = 5;
   int b[5] = {6, 7, 8, 9, 10};
+  f.data = b;
+  f.n_size = 5;
   printf("dot prod: %d \n", dot_product(a, b, n_size));
 
   int M_size[2] = {2,5};
@@ -23,6 +34,18 @@ int main(void){
   }
   puts("");
 
+  printf("struct dot prod: %d \n", struct_dot_product(v, f));
+
+
+}
+
+int struct_dot_product(Vector a, Vector b){
+  int sum = 0;
+  for (int i=0; i<a.n_size; i++){
+    sum += (a.data[i] * b.data[i]);
+  }
+  printf("sum: %d\n", sum);
+  return sum;
 }
 
 int dot_product(int *a, int *b, int n_size){
