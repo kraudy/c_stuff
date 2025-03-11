@@ -7,8 +7,12 @@ int main(void){
   int x_2d_1d[6] = {
     1,2,3,4,5,6
   };
+  int x_2[12] = {
+    1,2,3,4,5,6,7,8,9,10,11,12
+  };
   int d[1] = {6};
   int d2[2] = {2, 3};
+  int d3[3] = {1, 2, 3};
   int a = 3;
   int dims;
   
@@ -20,9 +24,14 @@ int main(void){
   dims = 0;
   my_1d_dims(&a, &dims, 0);
   my_1d_dims(x_2d_1d, d, 1);
+  // 2d
   my_1d_dims(x_2d_1d, d2, 2);
   d2[0]=3; d2[1]=2;
   my_1d_dims(x_2d_1d, d2, 2);
+  // 3d
+  my_1d_dims(x_2d_1d, d3, 3);
+  d3[0]=2; d3[1]=2; d3[2]=3;
+  my_1d_dims(x_2, d3, 3);
 
 }
 
@@ -36,11 +45,12 @@ void my_1d_array(int *a, int rows, int cols){
   }
 } 
 
-
+//TODO: Change input parameters to a struct
 void my_1d_dims(int *a, int *dims, int n_dims){
   puts("\nmy_1d_array");
   int idx = 0;
   int idx2 = 0;
+  int idx3 = 0;
   if (n_dims == 0){
     puts("scalar");
     printf("%d\n", a[0]);
@@ -54,8 +64,6 @@ void my_1d_dims(int *a, int *dims, int n_dims){
     puts("");
   }
 
-  idx=0;
-  idx2=0;
   if (n_dims == 2){
     puts("matrix");
     for (idx=0; idx<dims[0]; idx++){
@@ -69,6 +77,17 @@ void my_1d_dims(int *a, int *dims, int n_dims){
 
   if (n_dims == 3){
     puts("3d matrix");
+    for (idx=0; idx<dims[0]; idx++){
+      for (idx2=0; idx2<dims[1]; idx2++){
+        for (idx3=0; idx3<dims[2]; idx3++){
+          //printf("%d ", a[(idx * dims[1] * dims[2]) + (idx2 * dims[2]) + idx3]);
+          printf("%d ", a[(idx * dims[1] + idx2) * dims[2] + idx3] * 2);
+        }
+        puts("");
+      }
+      puts("");
+    }
+    puts("");
   }
 
 } 
