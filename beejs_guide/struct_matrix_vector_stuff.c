@@ -7,11 +7,13 @@ typedef struct {
 } Vector;
 
 typedef struct{
+  //TODO: Change this to storage which is always a 1d vector
   int *data;
+  //TODO: Change this to implement a View
   int n_size[2];
 } Matrix;
 
-int dot_product(Vector a, Vector b);
+int dot_product(Vector *a, Vector *b);
 Vector vector_matrix_product(Vector v, Matrix M);
 
 
@@ -35,7 +37,7 @@ int main(void){
   M.data = c;
   M.n_size[0] = 2; M.n_size[1] = 5;
 
-  printf("struct dot prod: %d \n", dot_product(v, f));
+  printf("struct dot prod: %d \n", dot_product(&v, &f));
 
   Vector v_result = vector_matrix_product(v, M);
   if (v_result.data == NULL) puts("Error pointer struct NULL");
@@ -46,10 +48,11 @@ int main(void){
 
 }
 
-int dot_product(Vector a, Vector b){
+int dot_product(Vector *a, Vector *b){
   int sum = 0;
-  for (int i=0; i<a.n_size; i++){
-    sum += (a.data[i] * b.data[i]);
+  // a->n_size = (*a).n_size 
+  for (int i=0; i< a->n_size; i++){
+    sum += (a->data[i] * b->data[i]);
   }
   printf("sum: %d\n", sum);
   return sum;
@@ -68,7 +71,7 @@ Vector vector_matrix_product(Vector v, Matrix M){
     Vector row;
     row.data = &M.data[i * M.n_size[1]];
     row.n_size = M.n_size[1];
-    result.data[i] = dot_product(v, row);
+    result.data[i] = dot_product(&v, &row);
   }
   return result;
 }
