@@ -48,9 +48,22 @@ int write_file(void){
   fclose(fp);
 }
 
+int bin_write(void){
+  FILE *fp;
+  unsigned char bytes[7] = {5, 37, 0, 88, 255, 300};
+
+  fp = fopen("output.bin", "wb");
+
+  // data, element size, n_elements, file pointer
+  fwrite(bytes, sizeof(char), 7, fp);
+
+  fclose(fp);
+
+}
+
 int main(void){
   read_fopen();
   read_fscanf();
   write_file();
-
+  bin_write();
 }
