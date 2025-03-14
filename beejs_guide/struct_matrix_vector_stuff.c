@@ -14,7 +14,7 @@ typedef struct{
 } Matrix;
 
 int dot_product(Vector *a, Vector *b);
-Vector vector_matrix_product(Vector v, Matrix M);
+Vector vector_matrix_product(Vector *v, Matrix *M);
 
 
 int main(void){
@@ -39,7 +39,7 @@ int main(void){
 
   printf("struct dot prod: %d \n", dot_product(&v, &f));
 
-  Vector v_result = vector_matrix_product(v, M);
+  Vector v_result = vector_matrix_product(&v, &M);
   if (v_result.data == NULL) puts("Error pointer struct NULL");
   for (int i=0; i<v_result.n_size; i++){
     printf("%d ", v_result.data[i]);
@@ -58,20 +58,20 @@ int dot_product(Vector *a, Vector *b){
   return sum;
 }
 
-Vector vector_matrix_product(Vector v, Matrix M){
+Vector vector_matrix_product(Vector *v, Matrix *M){
   // Create vector, must be in heap to not return nonesense stuff
   Vector result;
-  result.n_size = M.n_size[0];
-  result.data = (int*) malloc(M.n_size[0] * sizeof(int));
+  result.n_size = M->n_size[0];
+  result.data = (int*) malloc(M->n_size[0] * sizeof(int));
   if (result.data == NULL) puts("Error NULL pointer");
   
-  printf("M_size[0]: %d | M_size[1]: %d \n", M.n_size[0], M.n_size[1]);
-  for (int i=0; i < M.n_size[0]; i++){
+  printf("M_size[0]: %d | M_size[1]: %d \n", M->n_size[0], M->n_size[1]);
+  for (int i=0; i < M->n_size[0]; i++){
     printf("i: %d \n", i);
     Vector row;
-    row.data = &M.data[i * M.n_size[1]];
-    row.n_size = M.n_size[1];
-    result.data[i] = dot_product(&v, &row);
+    row.data = &M->data[i * M->n_size[1]];
+    row.n_size = M->n_size[1];
+    result.data[i] = dot_product(v, &row);
   }
   return result;
 }
