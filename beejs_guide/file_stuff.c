@@ -61,9 +61,22 @@ int bin_write(void){
 
 }
 
+int bin_read(void){
+  FILE *fp;
+  unsigned char c;
+  
+  fp = fopen("output.bin", "rb");
+  
+  while((fread(&c, sizeof(char), 1, fp)) > 0)
+    printf("%d\n", c);
+
+
+}
+
 int main(void){
   read_fopen();
   read_fscanf();
   write_file();
   bin_write();
+  bin_read();
 }
