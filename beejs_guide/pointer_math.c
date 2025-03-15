@@ -76,7 +76,23 @@ char* readline(FILE *fp){
       }
       buf = new_buf;
     }
+    buf[offset++] = c;
   }
+
+  if (c == EOF && offset == 0){
+    free(buf);
+    return NULL;
+  }
+
+  if(offset < bufsize - 1){
+    char *new_buf = realloc(buf, offset + 1);
+    if (new_buf != NULL)
+      buf = new_buf;
+  }
+
+  buf[offset] = '\0';
+
+  return buf;
 
 }
 
