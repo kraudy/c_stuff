@@ -100,4 +100,13 @@ char* readline(FILE *fp){
 int main(void){
   move_index();
   resize_pointer();
+
+  FILE *fp = fopen("foo.txt", "r");
+  char *line;
+  while((line = readline(fp)) != NULL){
+    printf("%s\n", line);
+    free(line);
+  }
+
+  fclose(fp);
 }
