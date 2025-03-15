@@ -54,6 +54,33 @@ void resize_pointer(void){
   free(p);
 }
 
+char* readline(FILE *fp){
+  int offset = 0;
+  int bufsize = 4;
+  char *buf;
+  int c;
+
+  // 4bytes = 4 chars
+  buf = malloc(bufsize);
+
+  if (buf == NULL)
+    puts("Buf NUll");
+  
+  while((c = fgetc(fp)) != '\n' && c != EOF){
+    if(offset == bufsize - 1){
+      bufsize *=2 ;
+      char *new_buf = realloc(buf, bufsize);
+      if (new_buf == NULL){
+        free(buf);
+        puts("Null pointer");
+      }
+      buf = new_buf;
+    }
+  }
+
+}
+
+
 int main(void){
   move_index();
   resize_pointer();
