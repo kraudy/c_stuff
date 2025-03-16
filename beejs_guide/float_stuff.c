@@ -13,6 +13,18 @@ void wrong_add(void){
 
 }
 
+void some_double_stuff(void){
+  printf("\nmore_float_stuff\n");
+  double x = 0.12345678901234500;
+  double y = 0.00000000000000060;
+  printf("%.11f\n", x);
+  printf("%.11f\n", y);
+
+}
+
+
 int main(void){
   wrong_add();
+  some_double_stuff();
+
 }
