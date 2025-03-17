@@ -62,7 +62,7 @@ Vector vector_matrix_product(Vector *v, Matrix *M){
   // Create vector, must be in heap to not return nonesense stuff
   Vector result;
   result.n_size = M->n_size[0];
-  result.data = (int*) malloc(M->n_size[0] * sizeof(int));
+  result.data = malloc(M->n_size[0] * sizeof(int));
   if (result.data == NULL) puts("Error NULL pointer");
   
   printf("M_size[0]: %d | M_size[1]: %d \n", M->n_size[0], M->n_size[1]);

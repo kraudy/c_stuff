@@ -9,7 +9,7 @@ void wrong_add(void){
   printf("%.11f\n", g);
 
   f += g; //Adding stuff would give %.11f presicion needed
-  printf("%.11f\n"), f;
+  printf("%.11f\n", f);
 
 }
 
@@ -22,9 +22,15 @@ void some_double_stuff(void){
 
 }
 
+void hex_stuff(void){
+  int a = 0x1A2B;
+  printf("%x\n", a);
+  printf("%e\n", 123456.0);
+}
+
 
 int main(void){
   wrong_add();
   some_double_stuff();
-
+  hex_stuff();
 }
