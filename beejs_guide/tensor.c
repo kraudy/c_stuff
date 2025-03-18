@@ -30,6 +30,8 @@ int main(void){
 /*
   So, when a tensor is made, by defacto a view wich shows all the elements
   in the full tensor shape is created. This will be the view at index 0.
+  Here, by default our tensor device is the mundane cpu.
+  Tensor triad: Device, Layout, Dtype
 */
 
 tensor make_tensor(float *data, int *shape, int dims){
@@ -39,8 +41,18 @@ tensor make_tensor(float *data, int *shape, int dims){
   T.data = data;
   T.shape = shape;
   T.dims = dims;
-  // Make default view, for now only 1d vectors
-  int strides[1] = {1};
-  T.views = make_view(strides, T.dims);
+  switch (dims){
+  case 1:
+    // Make default view, for now only 1d vectors
+    int strides[1] = {1};
+    T.views = make_view(strides, T.dims);
+    break;
+  case 2:
+    break;
+  case 3:
+    break;
+  default:
+    break;
+  }
   T.v_counts = 1;
 }
