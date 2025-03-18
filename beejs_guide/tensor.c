@@ -45,13 +45,11 @@ tensor make_tensor(float *data, int *shape, int dims){
   // Validate NULL pointer, maybe make T a tensor pointer
   // Validate malloc()
   puts("inside tensor");
-  tensor T;
-  // This is the defacto initialization
-  T.data = data;
-  
-  // Make view contigous
-  T.views = make_view(shape, dims);
-  T.v_counts = 1;
+  tensor T = {
+    .data = data,
+    .views = make_view(shape, dims), 
+    .v_counts = 1
+  };
 
   puts("end tensor");
 
@@ -69,12 +67,13 @@ view* make_view(int *shape, int dims){
     free(v);
     return NULL;
   }
-  
+
   switch (dims){
   case 1:
     // Make default view, for now only 1d vectors
     // Contigous stride
-    *v->strides = 1;
+    // v->strides[0] = 1;
+    v->strides[0] = 1;
     break;
   case 2:
     break;
