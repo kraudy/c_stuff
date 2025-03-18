@@ -45,7 +45,8 @@ tensor make_tensor(float *data, int *shape, int dims){
   case 1:
     // Make default view, for now only 1d vectors
     int strides[1] = {1};
-    T.views = make_view(strides, T.dims);
+    // Contigous stride
+    T.views = make_view(strides, dims);
     break;
   case 2:
     break;
@@ -55,4 +56,14 @@ tensor make_tensor(float *data, int *shape, int dims){
     break;
   }
   T.v_counts = 1;
+}
+
+view* make_view(int *strides, int v_dims){
+  view *v = malloc(sizeof(view));
+  if (v == NULL)
+    return NULL;
+  v->strides = strides;
+  v->v_dims = v_dims;
+
+  return v;
 }
