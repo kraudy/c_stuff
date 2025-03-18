@@ -1,21 +1,27 @@
 #include <stdio.h>
 
+typedef struct{
+
+} autograd_meta;
+
 typedef struct {
+  int *shape;
   int *strides;
-  int v_dims;
+  int dims;
 } view;
 
 typedef struct {
   float *data;
-  int *shape;
-  int dims;
   view *views; // This will need to be realloc
   int v_counts;
 } tensor;
 
+//TODO: Add a struct to keep track of tensors pointers
+
 tensor make_tensor(float *data, int *shape, int dims);
-view* make_view(int *strides, int v_dims);
+view* make_view(int *shape, int *strides, int v_dims);
 void show_tensor(tensor T, int v_index);
+void clean_tensors(void);
 
 
 int main(void){
@@ -36,17 +42,19 @@ int main(void){
 
 tensor make_tensor(float *data, int *shape, int dims){
   // Validate NULL pointer, maybe make T a tensor pointer
+  // Validate malloc()
   tensor T;
   // This is the defacto initialization
   T.data = data;
-  T.shape = shape;
-  T.dims = dims;
+  view v;
+  v.shape = shape;
+  //T.dims = dims;
   switch (dims){
   case 1:
     // Make default view, for now only 1d vectors
-    int strides[1] = {1};
     // Contigous stride
-    T.views = make_view(strides, dims);
+    *v.strides = 1;
+    //T.views = make_view(strides, dims);
     break;
   case 2:
     break;
@@ -55,15 +63,17 @@ tensor make_tensor(float *data, int *shape, int dims){
   default:
     break;
   }
+  v.dims = dims;
+  *T.views = v;
   T.v_counts = 1;
 }
 
-view* make_view(int *strides, int v_dims){
+view* make_view(int *shape, int *strides, int dims){
   view *v = malloc(sizeof(view));
   if (v == NULL)
     return NULL;
   v->strides = strides;
-  v->v_dims = v_dims;
+  v->dims = dims;
 
   return v;
 }
