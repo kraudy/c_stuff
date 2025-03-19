@@ -90,10 +90,17 @@ view* make_view(int *shape, int dims){
 
 void show_tensor(tensor T, int v_index){
   // get view pointer out
-  switch (T.views[0].dims){
+  view *v = &T.views[v_index];
+  if (v == NULL)
+    puts("Null view");
+
+  int dims = v->dims;
+
+  // Maybe dims is the outer for
+  switch (dims){
   case 1:
-    for (int i=0; i<T.views[v_index].shape[0]; i++)
-      printf("%.4f ", T.data[i * T.views[v_index].strides[0]]);
+    for (int i=0; i<v->shape[dims-1]; i++)
+      printf("%.4f ", T.data[i * v->strides[dims-1]]);
     puts("");
     break;
   case 2:
