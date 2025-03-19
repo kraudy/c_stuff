@@ -24,8 +24,8 @@ view* make_view_contiguous(int *shape, int v_dims);
 void show_tensor(tensor T, int v_index);
 void free_tensor(tensor T);
 
-
-int main(void){
+void vector_test(void){
+  printf("\nvector_test\n");
   // do something like make_data
   float a[6] = {1.0, 2.0, 3.0, 4.0, 5.0, 6.0};
   int shape[1] = {6};
@@ -35,6 +35,24 @@ int main(void){
   /* I need a way here to make another view of the same tensor */
   free_tensor(T);
   puts("Fin!");
+}
+
+void matrix_test(void){
+  printf("\nmatrix_test\n");
+  // do something like make_data
+  float a[6] = {1.0, 2.0, 3.0, 4.0, 5.0, 6.0};
+  int shape[2] = {2, 3};
+  int dims = 2;
+  tensor T = make_tensor(a, shape, dims);
+  show_tensor(T, 0);
+  /* I need a way here to make another view of the same tensor */
+  free_tensor(T);
+  puts("Fin!");
+}
+
+int main(void){
+  vector_test();
+  matrix_test();
 }
 
 /*
@@ -104,13 +122,19 @@ void show_tensor(tensor T, int v_index){
 
   switch (dims){
   case 1:
-    for (int dim=0; dim<dims; dim++){
-      for (int i=0; i<shape[dim]; i++)
-        printf("%.4f ", data[i * strides[dim]]);
-      puts("");
-    }
+    printf("stride1 %d\n", strides[0]);
+    for (int row=0; row<shape[0]; row++)
+      printf("%.4f ", data[(row * strides[0])]);
+    puts("");
     break;
   case 2:
+    printf("stride1 %d\n", strides[0]);
+    printf("stride2 %d\n", strides[1]);
+    for (int row=0; row<shape[0]; row++){
+      for (int col=0; col<shape[1]; col++)
+        printf("%.4f ", data[(row * strides[0]) + (col * strides[1])]);
+      puts("");
+    }
     break;
   case 3:
     break;
