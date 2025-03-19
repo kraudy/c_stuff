@@ -50,9 +50,23 @@ void matrix_test(void){
   puts("Fin!");
 }
 
+void cube_test(void) {
+  printf("\ncube_test\n");
+  // Example: 2x2x3 tensor (2 slices, 2 rows, 3 columns)
+  float a[12] = {1.0, 2.0, 3.0, 4.0, 5.0, 6.0,  // Slice 0
+                  7.0, 8.0, 9.0, 10.0, 11.0, 12.0}; // Slice 1
+  int shape[3] = {2, 2, 3};
+  int dims = 3;
+  tensor T = make_tensor(a, shape, dims);
+  show_tensor(T, 0);
+  free_tensor(T);
+  puts("Fin!");
+}
+
 int main(void){
   vector_test();
   matrix_test();
+  cube_test();
 }
 
 /*
@@ -121,6 +135,7 @@ void show_tensor(tensor T, int v_index){
   int *shape = v->shape;
   int *strides = v->strides;
 
+  //TODO: Make this for N dimensions
   switch (dims){
   case 1:
     printf("stride1 %d\n", strides[0]);
@@ -138,6 +153,16 @@ void show_tensor(tensor T, int v_index){
     }
     break;
   case 3:
+    for (int depth=0; depth<shape[0]; depth++){
+      for (int row=0; row<shape[1]; row++){
+        for (int col=0; col<shape[2]; col++){  
+          int idx = (depth * strides[0]) + (row * strides[1]) + (col * strides[2]);
+          printf("%.4f ", data[idx]);
+        }
+        puts("");
+      }
+      puts("");
+    }
     break;
   default:
     break;
