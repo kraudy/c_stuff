@@ -90,10 +90,11 @@ view* make_view_contiguous(int *shape, int dims){
     return NULL;
   }
 
-  /* Strides of contiguous view
-  [1 if i == (dims-1) else shape[i+1] for i in range(dims)]*/
-  for (int i=0; i<dims; i++){
-    v->strides[i] = (i == dims-1) ? 1 : shape[i+1];
+  /* Strides of contiguous view */
+  int stride = 1;
+  for (int i=dims-1; i>=0; i--){
+    v->strides[i] = stride;
+    stride *= shape[i];
   }
 
   v->dims = dims;
