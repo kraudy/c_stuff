@@ -31,6 +31,7 @@ int main(void){
   int shape[1] = {6};
   int dims = 1;
   tensor T = make_tensor(a, shape, dims);
+  show_tensor(T, 0);
   puts("Fin!");
 }
 
@@ -85,4 +86,21 @@ view* make_view(int *shape, int dims){
   v->dims = dims;
   puts("end view");
   return v;
+}
+
+void show_tensor(tensor T, int v_index){
+  // get view pointer out
+  switch (T.views[0].dims){
+  case 1:
+    for (int i=0; i<T.views[v_index].shape[0]; i++)
+      printf("%.4f ", T.data[i * T.views[v_index].strides[0]]);
+    puts("");
+    break;
+  case 2:
+    break;
+  case 3:
+    break;
+  default:
+    break;
+  }
 }
