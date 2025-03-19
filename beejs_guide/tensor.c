@@ -20,7 +20,7 @@ typedef struct {
 //TODO: Add a struct to keep track of tensors pointers
 
 tensor make_tensor(float *data, int *shape, int dims);
-view* make_view(int *shape, int v_dims);
+view* make_view_contiguous(int *shape, int v_dims);
 void show_tensor(tensor T, int v_index);
 void free_tensor(tensor T);
 
@@ -32,6 +32,7 @@ int main(void){
   int dims = 1;
   tensor T = make_tensor(a, shape, dims);
   show_tensor(T, 0);
+  /* I need a way here to make another view of the same tensor */
   free_tensor(T);
   puts("Fin!");
 }
@@ -49,7 +50,7 @@ tensor make_tensor(float *data, int *shape, int dims){
   puts("inside tensor");
   tensor T = {
     .data = data,
-    .views = make_view(shape, dims), 
+    .views = make_view_contiguous(shape, dims), 
     .v_counts = 1
   };
 
@@ -58,32 +59,25 @@ tensor make_tensor(float *data, int *shape, int dims){
   return T;
 }
 
-view* make_view(int *shape, int dims){
+view* make_view_contiguous(int *shape, int dims){
   view *v = malloc(sizeof(view));
   puts("inside view");
   if (v == NULL)
     return NULL;
   v->shape = shape;
   v->strides = malloc(dims * sizeof(int));
+  /* The number of strides deppends on the number of dimensions*/
   if (v->strides == NULL){
     free(v);
     return NULL;
   }
 
-  switch (dims){
-  case 1:
-    // Make default view, for now only 1d vectors
-    // Contigous stride
-    // v->strides[0] = 1;
-    v->strides[0] = 1;
-    break;
-  case 2:
-    break;
-  case 3:
-    break;
-  default:
-    break;
+  /* Strides of contiguous view
+  [1 if i == (dims-1) else shape[i+1] for i in range(dims)]*/
+  for (int i=0; i<dims; i++){
+    v->strides[i] = (i == dims-1) ? 1 : shape[i+1];
   }
+
   v->dims = dims;
   puts("end view");
   return v;
