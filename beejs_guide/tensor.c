@@ -22,7 +22,7 @@ typedef struct {
 tensor make_tensor(float *data, int *shape, int dims);
 view* make_view(int *shape, int v_dims);
 void show_tensor(tensor T, int v_index);
-void clean_tensors(void);
+void free_tensor(tensor T);
 
 
 int main(void){
@@ -32,6 +32,7 @@ int main(void){
   int dims = 1;
   tensor T = make_tensor(a, shape, dims);
   show_tensor(T, 0);
+  free_tensor(T);
   puts("Fin!");
 }
 
@@ -104,13 +105,16 @@ void show_tensor(tensor T, int v_index){
   }
   // Get view dims
   int dims = v->dims;
+  int *shape = v->shape;
+  int *strides = v->strides;
 
-  // Maybe dims is the outer for
   switch (dims){
   case 1:
-    for (int i=0; i<v->shape[dims-1]; i++)
-      printf("%.4f ", data[i * v->strides[dims-1]]);
-    puts("");
+    for (int dim=0; dim<dims; dim++){
+      for (int i=0; i<shape[dim]; i++)
+        printf("%.4f ", data[i * strides[dim]]);
+      puts("");
+    }
     break;
   case 2:
     break;
@@ -119,4 +123,13 @@ void show_tensor(tensor T, int v_index){
   default:
     break;
   }
+}
+
+void free_tensor(tensor T){
+  for (int i=0; i<T.v_counts; i++){
+    free(T.views[i].strides);
+    //free(T.views[i].shape); // Not allocated
+  }
+  free(T.views);
+  //free(T.data); // Stack data
 }
