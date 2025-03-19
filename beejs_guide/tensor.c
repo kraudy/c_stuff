@@ -89,18 +89,27 @@ view* make_view(int *shape, int dims){
 }
 
 void show_tensor(tensor T, int v_index){
-  // get view pointer out
+  if (v_index > T.v_counts){
+    puts("View index out of range");
+    return;
+  }
+  // Get tensor data storage
+  float *data = T.data;
+  // Get view pointer out
   view *v = &T.views[v_index];
-  if (v == NULL)
-    puts("Null view");
 
+  if (v == NULL){
+    puts("Null view");
+    return;
+  }
+  // Get view dims
   int dims = v->dims;
 
   // Maybe dims is the outer for
   switch (dims){
   case 1:
     for (int i=0; i<v->shape[dims-1]; i++)
-      printf("%.4f ", T.data[i * v->strides[dims-1]]);
+      printf("%.4f ", data[i * v->strides[dims-1]]);
     puts("");
     break;
   case 2:
