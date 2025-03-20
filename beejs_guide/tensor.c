@@ -20,7 +20,7 @@ typedef struct {
 //TODO: Add a struct to keep track of tensors pointers
 
 tensor make_tensor(float *data, int *shape, int dims);
-view* make_view_contiguous(int *shape, int v_dims);
+tensor* make_view_contiguous(tensor *T, int *shape, int v_dims);
 void show_tensor(tensor T, int v_index);
 void free_tensor(tensor T);
 
@@ -82,20 +82,25 @@ tensor make_tensor(float *data, int *shape, int dims){
   puts("inside tensor");
   tensor T = {
     .data = data,
-    .views = make_view_contiguous(shape, dims), 
     .v_counts = 1
   };
+
+  //.views = make_view_contiguous(shape, dims), 
+  T = *make_view_contiguous(&T, shape, dims); 
+
 
   puts("end tensor");
 
   return T;
 }
 
-view* make_view_contiguous(int *shape, int dims){
+tensor* make_view_contiguous(tensor *T, int *shape, int dims){
   view *v = malloc(sizeof(view));
   puts("inside view");
   if (v == NULL)
     return NULL;
+  
+
   v->shape = shape;
   v->strides = malloc(dims * sizeof(int));
   /* The number of strides deppends on the number of dimensions*/
@@ -113,11 +118,18 @@ view* make_view_contiguous(int *shape, int dims){
 
   v->dims = dims;
   puts("end view");
-  return v;
+
+  
+  // This should be realloc
+  T->views = malloc(T->v_counts * sizeof(view));
+  //T->views[T->v_counts] = *v;
+  T->views[T->v_counts-1] = *v;
+  
+  return T;
 }
 
 void show_tensor(tensor T, int v_index){
-  if (v_index > T.v_counts){
+  if (v_index >= T.v_counts){
     puts("View index out of range");
     return;
   }
