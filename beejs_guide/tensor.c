@@ -86,7 +86,7 @@ tensor make_tensor(float *data, int *shape, int dims){
   };
 
   //.views = make_view_contiguous(shape, dims), 
-  T = *make_view_contiguous(&T, shape, dims); 
+  make_view_contiguous(&T, shape, dims); 
 
 
   puts("end tensor");
@@ -95,11 +95,14 @@ tensor make_tensor(float *data, int *shape, int dims){
 }
 
 tensor* make_view_contiguous(tensor *T, int *shape, int dims){
-  view *v = malloc(sizeof(view));
+  //view *v = malloc(sizeof(view));
   puts("inside view");
-  if (v == NULL)
-    return NULL;
+  //if (v == NULL)
+  //  return NULL;
   
+  // This should be realloc by default, validate v_counts
+  T->views = malloc(T->v_counts * sizeof(view));
+  view *v = &T->views[T->v_counts-1];
 
   v->shape = shape;
   v->strides = malloc(dims * sizeof(int));
@@ -120,11 +123,10 @@ tensor* make_view_contiguous(tensor *T, int *shape, int dims){
   puts("end view");
 
   
-  // This should be realloc
-  T->views = malloc(T->v_counts * sizeof(view));
-  //T->views[T->v_counts] = *v;
-  T->views[T->v_counts-1] = *v;
   
+  //T->views[T->v_counts] = *v;
+  //T->views[T->v_counts-1] = *v;
+
   return T;
 }
 
