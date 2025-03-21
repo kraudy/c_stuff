@@ -1,13 +1,18 @@
 #!/bin/bash
 
 # Check if a source file argument is provided
-if [ $# -ne 1 ]; then
+if [ $# -lt 1 ]; then
     echo "Usage: $0 <source_file.c>"
     exit 1
 fi
 
 # Assign the input argument to a variable
 SOURCE_FILE="$1"
+
+if [ $# -gt 1 ] ; then
+    ALL_ARGS="${@:2}"
+    #ALL_ARGS=("${@:2}")
+fi
 
 # Check if the source file exists
 if [ ! -f "$SOURCE_FILE" ]; then
@@ -30,7 +35,13 @@ fi
 
 # Run the compiled program
 echo "Running $BASE_NAME..."
-./"$BASE_NAME"
+if [ $# -gt 1 ]; then
+    #./"$BASE_NAME" "$ALL_ARGS[@]"
+    ./"$BASE_NAME" "$ALL_ARGS"
+else
+    ./"$BASE_NAME"
+fi
+
 
 # Delete the compiled binary
 echo "Deleting compiled binary $BASE_NAME..."

@@ -20,8 +20,11 @@ typedef struct {
 //TODO: Add a struct to keep track of all tensors pointers
 
 tensor make_tensor(float *data, int *shape, int dims);
+//tensor make_tensor_random(float *data, int *shape, int dims);
 tensor* make_view_contiguous(tensor *T, int *shape, int v_dims);
+//tensor* make_view_custom(tensor *T, int *shape, int v_dims);
 void show_tensor(tensor T);
+//void show_tensor_view(tensor T, int v_idx);
 void free_tensor(tensor T);
 
 #endif
