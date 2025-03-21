@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <math.h>
 
 #define HAPPY
 
@@ -35,10 +36,20 @@ void test4(void){
   printf("C Version: %ld\n", __STDC_VERSION__);
 }
 
-#define SQR(x) x * x
+//#define SQR(x) x * x
+//#define SQR(x) (x) * (x)
+#define SQR(x) ((x) * (x))
 void test5(void){
   printf("%d\n", SQR(12)); 
-  printf("%d\n", SQR(3 + 4)); // 19, bad! 
+  printf("%d\n", SQR(3 + 4)); // 19, bad! | 49, good!.
+}
+
+#define QUADP(a, b, c) ((-(b) + sqrt((b) * (b) - 4 * (a) * (c))) / (2 * (a)))
+#define QUADM(a, b, c) ((-(b) - sqrt((b) * (b) - 4 * (a) * (c))) / (2 * (a)))
+#define QUAD(a, b, c) QUADP(a, b, c), QUADM(a, b, c) //two solutions of cuadratic equation
+void test6(void){
+  printf("2*x^2 + 10*x + 5 = 0\n");
+  printf("x = %f or x = %f\n", QUAD(2, 10, 5));
 }
 
 int main(void){
@@ -47,4 +58,5 @@ int main(void){
   test3();
   test4();
   test5();
+  test6();
 }
