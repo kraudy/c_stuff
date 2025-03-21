@@ -1,28 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
-
-typedef struct{
-
-} autograd_meta;
-
-typedef struct {
-  int *shape;
-  int *strides;
-  int dims;
-} view;
-
-typedef struct {
-  float *data;
-  view *views; // This will need to be realloc
-  int v_counts;
-} tensor;
-
-//TODO: Add a struct to keep track of tensors pointers
-
-tensor make_tensor(float *data, int *shape, int dims);
-tensor* make_view_contiguous(tensor *T, int *shape, int v_dims);
-void show_tensor(tensor T, int v_index);
-void free_tensor(tensor T);
+#include "tensor.h"
 
 void vector_test(void){
   printf("\nvector_test\n");
@@ -31,7 +9,7 @@ void vector_test(void){
   int shape[1] = {6};
   int dims = 1;
   tensor T = make_tensor(a, shape, dims);
-  show_tensor(T, 0);
+  show_tensor(T);
   /* I need a way here to make another view of the same tensor */
   free_tensor(T);
   puts("Fin!");
@@ -44,7 +22,7 @@ void matrix_test(void){
   int shape[2] = {2, 3};
   int dims = 2;
   tensor T = make_tensor(a, shape, dims);
-  show_tensor(T, 0);
+  show_tensor(T);
   /* I need a way here to make another view of the same tensor */
   free_tensor(T);
   puts("Fin!");
@@ -58,7 +36,7 @@ void cube_test(void) {
   int shape[3] = {2, 2, 3};
   int dims = 3;
   tensor T = make_tensor(a, shape, dims);
-  show_tensor(T, 0);
+  show_tensor(T);
   free_tensor(T);
   puts("Fin!");
 }
@@ -82,6 +60,7 @@ tensor make_tensor(float *data, int *shape, int dims){
   puts("inside tensor");
   tensor T = {
     .data = data,
+    .views = NULL,
     .v_counts = 1
   };
 
@@ -124,11 +103,13 @@ tensor* make_view_contiguous(tensor *T, int *shape, int dims){
   return T;
 }
 
-void show_tensor(tensor T, int v_index){
-  if (v_index >= T.v_counts){
-    puts("View index out of range");
-    return;
-  }
+void show_tensor(tensor T){
+  /* By default, use last view */
+  int v_index = T.v_counts-1;
+  //if (v_index >= T.v_counts){
+  //  puts("View index out of range");
+  //  return;
+  //}
   // Get tensor data address
   float *data = T.data;
   // Get view pointer out
@@ -138,6 +119,7 @@ void show_tensor(tensor T, int v_index){
     puts("Null view");
     return;
   }
+  //TODO: Add something here to traverse the tensor giving the required data.
   // Get view dims
   int dims = v->dims;
   int *shape = v->shape;
