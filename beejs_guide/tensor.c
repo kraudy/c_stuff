@@ -85,9 +85,7 @@ tensor make_tensor(float *data, int *shape, int dims){
     .v_counts = 1
   };
 
-  //.views = make_view_contiguous(shape, dims), 
   make_view_contiguous(&T, shape, dims); 
-
 
   puts("end tensor");
 
@@ -95,13 +93,14 @@ tensor make_tensor(float *data, int *shape, int dims){
 }
 
 tensor* make_view_contiguous(tensor *T, int *shape, int dims){
-  //view *v = malloc(sizeof(view));
   puts("inside view");
-  //if (v == NULL)
-  //  return NULL;
   
-  // This should be realloc by default, validate v_counts
-  T->views = malloc(T->v_counts * sizeof(view));
+  view *new_view = realloc(T->views, T->v_counts * sizeof(view));
+  if(new_view == NULL)
+    return NULL;
+
+  T->views = new_view;
+  // Get last view address
   view *v = &T->views[T->v_counts-1];
 
   v->shape = shape;
@@ -122,11 +121,6 @@ tensor* make_view_contiguous(tensor *T, int *shape, int dims){
   v->dims = dims;
   puts("end view");
 
-  
-  
-  //T->views[T->v_counts] = *v;
-  //T->views[T->v_counts-1] = *v;
-
   return T;
 }
 
@@ -135,7 +129,7 @@ void show_tensor(tensor T, int v_index){
     puts("View index out of range");
     return;
   }
-  // Get tensor data storage
+  // Get tensor data address
   float *data = T.data;
   // Get view pointer out
   view *v = &T.views[v_index];
