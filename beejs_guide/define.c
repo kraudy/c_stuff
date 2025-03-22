@@ -44,12 +44,20 @@ void test5(void){
   printf("%d\n", SQR(3 + 4)); // 19, bad! | 49, good!.
 }
 
-#define QUADP(a, b, c) ((-(b) + sqrt((b) * (b) - 4 * (a) * (c))) / (2 * (a)))
-#define QUADM(a, b, c) ((-(b) - sqrt((b) * (b) - 4 * (a) * (c))) / (2 * (a)))
-#define QUAD(a, b, c) QUADP(a, b, c), QUADM(a, b, c) //two solutions of cuadratic equation
-void test6(void){
-  printf("2*x^2 + 10*x + 5 = 0\n");
-  printf("x = %f or x = %f\n", QUAD(2, 10, 5));
+//#define QUADP(a, b, c) ((-(b) + sqrt((b) * (b) - 4 * (a) * (c))) / (2 * (a)))
+//#define QUADM(a, b, c) ((-(b) - sqrt((b) * (b) - 4 * (a) * (c))) / (2 * (a)))
+//#define QUAD(a, b, c) QUADP(a, b, c), QUADM(a, b, c) //two solutions of cuadratic equation
+//void test6(void){
+//  printf("2*x^2 + 10*x + 5 = 0\n");
+//  printf("x = %f or x = %f\n", QUAD(2, 10, 5));
+//}
+
+
+void test7(void){
+  #pragma omp parallel for
+  for (int i = 0; i < 10; i++) { 
+    puts("Hi from pragma"); 
+  }
 }
 
 int main(void){
@@ -58,5 +66,6 @@ int main(void){
   test3();
   test4();
   test5();
-  test6();
+  //test6();
+  test7();
 }
