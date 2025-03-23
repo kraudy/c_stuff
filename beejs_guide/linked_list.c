@@ -40,7 +40,10 @@ struct child {
 void print_parent(void *p){
   /* This let us defference the pointer */
   struct parent *self = p;
-    printf("Parent: %d, %d\n", self->a, self->b);
+  printf("Parent: %d, %d\n", self->a, self->b);
+
+  struct child *self_child = p;
+  printf("Child from parent pointer: %d, %d\n", self_child->c, self_child->d);
 }
 
 void print_child(struct child *self){
