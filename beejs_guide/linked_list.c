@@ -57,8 +57,27 @@ void child_test(void){
   print_parent(&c);
 }
 
+struct foo{
+  unsigned a:1;
+  unsigned b:1;
+  unsigned c;
+  unsigned d;
+};
+
+struct foo2{
+  unsigned char a:2;
+  unsigned char dummy:5;
+  unsigned char b:1;
+};
+
+void bits_length(void){
+  printf("Foo: %zu\n", sizeof(1 * sizeof(struct foo)));
+  printf("Foo2: %zu\n", sizeof(1 * sizeof(struct foo2)));
+}
+
 int main(void){
   test1();
   child_test();
+  bits_length();
 }
 
