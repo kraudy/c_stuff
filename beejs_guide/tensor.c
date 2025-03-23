@@ -2,48 +2,31 @@
 #include <stdlib.h>
 #include "tensor.h"
 
-void vector_test(void){
-  printf("\nvector_test\n");
-  // do something like make_data
-  float a[6] = {1.0, 2.0, 3.0, 4.0, 5.0, 6.0};
-  int shape[1] = {6};
-  int dims = 1;
-  tensor *T = malloc(1 * sizeof(tensor));
-  make_tensor(T, a, shape, dims);
-  show_tensor(T);
-  /* I need a way here to make another view of the same tensor */
-  free_tensor(T);
-  puts("Fin!");
-}
-
-void matrix_test(void){
-  printf("\nmatrix_test\n");
-  // do something like make_data
-  float a[6] = {1.0, 2.0, 3.0, 4.0, 5.0, 6.0};
-  int shape[2] = {2, 3};
-  int dims = 2;
-  tensor *T = malloc(1 * sizeof(tensor));
-  make_tensor(T, a, shape, dims);
-  show_tensor(T);
-  /* I need a way here to make another view of the same tensor */
-  free_tensor(T);
-  puts("Fin!");
-}
-
-void cube_test(void) {
-  printf("\ncube_test\n");
-  // Example: 2x2x3 tensor (2 slices, 2 rows, 3 columns);
+void test1(void) {
+  /* Vector of data */
   float data[12] = {1.0, 2.0, 3.0, 4.0, 5.0, 6.0,  // Slice 0
                   7.0, 8.0, 9.0, 10.0, 11.0, 12.0}; // Slice 1
-  int shape[3] = {2, 2, 3};
-  int dims = 3;
+
+  printf("\ntest1 vector\n");
+  /* Make vector */
+  int shape[1] = {12};
+  int dims = 1;
   tensor *T = malloc(1 * sizeof(tensor));
   make_tensor(T, data, shape, dims);
   show_tensor(T);
 
+  printf("\ntest1 matrix\n");
+  /* Make matrix */
   int shape2[2] = {4, 3};
   int dims2 = 2;
   make_view_contiguous(T, shape2, dims2);
+  show_tensor(T);
+
+  printf("\ntest1 3d tensor\n");
+  /* Make 3d tensor */
+  int shape3[3] = {2, 2, 3};
+  int dims3 = 3;
+  make_view_contiguous(T, shape3, dims3);
   show_tensor(T);
 
   free_tensor(T);
@@ -51,9 +34,7 @@ void cube_test(void) {
 }
 
 int main(void){
-  vector_test();
-  matrix_test();
-  cube_test();
+  test1();
 }
 
 /*
