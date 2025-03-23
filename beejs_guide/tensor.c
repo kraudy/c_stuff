@@ -8,7 +8,8 @@ void vector_test(void){
   float a[6] = {1.0, 2.0, 3.0, 4.0, 5.0, 6.0};
   int shape[1] = {6};
   int dims = 1;
-  tensor T = make_tensor(a, shape, dims);
+  tensor *T = malloc(1 * sizeof(tensor));
+  make_tensor(T, a, shape, dims);
   show_tensor(T);
   /* I need a way here to make another view of the same tensor */
   free_tensor(T);
@@ -21,7 +22,8 @@ void matrix_test(void){
   float a[6] = {1.0, 2.0, 3.0, 4.0, 5.0, 6.0};
   int shape[2] = {2, 3};
   int dims = 2;
-  tensor T = make_tensor(a, shape, dims);
+  tensor *T = malloc(1 * sizeof(tensor));
+  make_tensor(T, a, shape, dims);
   show_tensor(T);
   /* I need a way here to make another view of the same tensor */
   free_tensor(T);
@@ -30,12 +32,13 @@ void matrix_test(void){
 
 void cube_test(void) {
   printf("\ncube_test\n");
-  // Example: 2x2x3 tensor (2 slices, 2 rows, 3 columns)
+  // Example: 2x2x3 tensor (2 slices, 2 rows, 3 columns);
   float a[12] = {1.0, 2.0, 3.0, 4.0, 5.0, 6.0,  // Slice 0
                   7.0, 8.0, 9.0, 10.0, 11.0, 12.0}; // Slice 1
   int shape[3] = {2, 2, 3};
   int dims = 3;
-  tensor T = make_tensor(a, shape, dims);
+  tensor *T = malloc(1 * sizeof(tensor));
+  make_tensor(T, a, shape, dims);
   show_tensor(T);
   free_tensor(T);
   puts("Fin!");
@@ -54,17 +57,15 @@ int main(void){
   Tensor triad: Device, Layout, Dtype
 */
 
-tensor make_tensor(float *data, int *shape, int dims){
+tensor* make_tensor(tensor *T ,float *data, int *shape, int dims){
   // Validate NULL pointer, maybe make T a tensor pointer
   // Validate malloc()
   puts("inside tensor");
-  tensor T = {
-    .data = data,
-    .views = NULL,
-    .v_counts = 1
-  };
+  T->data = data;
+  T->views = NULL;
+  T->v_counts = 1;
 
-  make_view_contiguous(&T, shape, dims); 
+  make_view_contiguous(T, shape, dims); 
 
   puts("end tensor");
 
@@ -103,17 +104,17 @@ tensor* make_view_contiguous(tensor *T, int *shape, int dims){
   return T;
 }
 
-void show_tensor(tensor T){
+void show_tensor(tensor *T){
   /* By default, use last view */
-  int v_index = T.v_counts-1;
-  //if (v_index >= T.v_counts){
+  int v_index = T->v_counts-1;
+  //if (v_index >= T->v_counts){
   //  puts("View index out of range");
   //  return;
   //}
   // Get tensor data address
-  float *data = T.data;
+  float *data = T->data;
   // Get view pointer out
-  view *v = &T.views[v_index];
+  view *v = &T->views[v_index];
 
   if (v == NULL){
     puts("Null view");
@@ -159,11 +160,12 @@ void show_tensor(tensor T){
   }
 }
 
-void free_tensor(tensor T){
-  for (int i=0; i<T.v_counts; i++){
-    free(T.views[i].strides);
-    //free(T.views[i].shape); // Not allocated
+void free_tensor(tensor *T){
+  for (int i=0; i<T->v_counts; i++){
+    free(T->views[i].strides);
+    //free(T->views[i].shape); // Not allocated
   }
-  free(T.views);
-  //free(T.data); // Stack data
+  free(T->views);
+  //free(T->data); // Stack data
+  free(T);
 }
