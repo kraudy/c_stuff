@@ -33,13 +33,19 @@ void matrix_test(void){
 void cube_test(void) {
   printf("\ncube_test\n");
   // Example: 2x2x3 tensor (2 slices, 2 rows, 3 columns);
-  float a[12] = {1.0, 2.0, 3.0, 4.0, 5.0, 6.0,  // Slice 0
+  float data[12] = {1.0, 2.0, 3.0, 4.0, 5.0, 6.0,  // Slice 0
                   7.0, 8.0, 9.0, 10.0, 11.0, 12.0}; // Slice 1
   int shape[3] = {2, 2, 3};
   int dims = 3;
   tensor *T = malloc(1 * sizeof(tensor));
-  make_tensor(T, a, shape, dims);
+  make_tensor(T, data, shape, dims);
   show_tensor(T);
+
+  int shape2[2] = {4, 3};
+  int dims2 = 2;
+  make_view_contiguous(T, shape2, dims2);
+  show_tensor(T);
+
   free_tensor(T);
   puts("Fin!");
 }
@@ -107,6 +113,7 @@ tensor* make_view_contiguous(tensor *T, int *shape, int dims){
 void show_tensor(tensor *T){
   /* By default, use last view */
   int v_index = T->v_counts-1;
+
   //if (v_index >= T->v_counts){
   //  puts("View index out of range");
   //  return;

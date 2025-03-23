@@ -5,10 +5,12 @@ typedef struct{
 
 } autograd_meta;
 
+//TODO: Maybe make the views a linked list, this could help to keep sequence track
 typedef struct {
   int *shape;
   int *strides;
   int dims;
+  //view *next;
 } view;
 
 typedef struct {
