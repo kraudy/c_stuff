@@ -52,10 +52,20 @@ union foo3 {
   struct b sb;
 };
 
-void test2(void){
+struct foo4{
+  int x, y;
+};
 
+struct foo4 f(void){
+  return (struct foo4){.x=34, .y=90};
+}
+
+void test2(void){
+  struct foo4 a = f();
+  printf("%d %d \n", a.x, a.y);
 }
 
 int main(void){
   test1();
+  test2();
 }
