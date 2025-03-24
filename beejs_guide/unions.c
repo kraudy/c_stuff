@@ -34,6 +34,28 @@ void test1(void){
   printf("%f\n", *foo_float_p);
 }
 
+struct a {
+  int x;     
+  float y; 
+  char *p;
+};
+
+struct b {
+  int x;  
+  float y; 
+  double *p;
+  short z;
+};
+
+union foo3 {
+  struct a sa;
+  struct b sb;
+};
+
+void test2(void){
+
+}
+
 int main(void){
   test1();
 }
