@@ -30,7 +30,9 @@ void* my_memcpy(void *dest, const void *src, size_t n){
 int main(void){
   test1();
   int a = 5;
-  void *s = a;
-  void *d;
+  int b;
+  void *s = &a;
+  void *d = &b;
   my_memcpy(d, s, sizeof(int));
+  printf("%d\n", b);
 }
