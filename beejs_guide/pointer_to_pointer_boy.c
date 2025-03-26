@@ -45,9 +45,19 @@ void test3(void){
   struct foo x = {0x12, 0x12345678};
   unsigned  char *p =  (unsigned char*)&x;
 
+  puts("Foo repre");
   for (size_t i=0; i<sizeof x; i++){
-    printf("%02X\n", p[i]);
+    printf("%p | %02X \n", &p[i], p[i]);
   }
+  puts("");
+
+  int a = 5;
+  unsigned char *pa = &a;
+  puts("Int repre");
+  for (size_t i=0; i<sizeof(int); i++){
+    printf("%p | %02X \n", &pa[i], pa[i]);
+  }
+  puts("");
 
 }
 
