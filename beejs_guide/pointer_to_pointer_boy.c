@@ -61,8 +61,19 @@ void test3(void){
 
 }
 
+void print_int(int n){
+  printf("%d\n", n);
+}
+
+void test4(){
+  void (*p)(int);
+  p = print_int;
+  p(1234);
+}
+
 int main(void){
   test1();
   test2();
   test3();
+  test4();
 }
