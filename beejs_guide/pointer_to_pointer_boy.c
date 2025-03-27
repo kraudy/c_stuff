@@ -71,9 +71,29 @@ void test4(){
   p(1234);
 }
 
+int add(int a, int b){
+  return a + b;
+}
+
+int mult(int a, int b){
+  return a * b;
+}
+
+void print_math(int (*op)(int, int), int x, int y){
+  int result = op(x, y);
+  printf("%d\n",result);
+}
+
+void test5(void){
+  puts("Function as param");
+  print_math(add, 5, 7);
+  print_math(mult, 5, 7);
+}
+
 int main(void){
   test1();
   test2();
   test3();
   test4();
+  test5();
 }
