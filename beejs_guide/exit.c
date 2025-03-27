@@ -5,9 +5,14 @@ void on_exit_1(void){
   printf("Exit handler 1 called!\n");
 }
 
+void on_exit_2(void){
+  printf("Exit handler 2 called!\n");
+}
+
 int main(void){
 
   atexit(on_exit_1);
+  atexit(on_exit_2);
 
   puts("End");
   return 0;
