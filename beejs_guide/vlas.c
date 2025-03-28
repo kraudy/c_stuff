@@ -9,8 +9,8 @@ void print_matrix(int h, int w, int m[h][w]){
   
 }
 
-void test1(){
-  int rows = 4, cols = 7;
+void test1(int rows, int cols){
+  //int rows = 4, cols = 7;
   int matrix[rows][cols];
 
   for (int row = 0; row<rows; row++)
@@ -21,6 +21,6 @@ void test1(){
 }
 
 int main(void){
-  test1();
+  test1(4, 7);
 
 }
