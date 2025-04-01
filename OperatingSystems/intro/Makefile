@@ -1,6 +1,18 @@
-io: io.c
-	#clang -O -Wall -c io.c		# Generates .o
-	clang -O -Wall -o io io.c	# Generates executable
+
+SRCS = io.c
+
+TARG = io
+
+CC = clang
+
+OPTS = -O -Wall #-o
+#LIBS
+OBJS = $(SRCS:.c=.o)
+
+all: $(TARG)
+
+$(TARG): $(SRCS)
+	$(CC) $(OPTS) -o $(TARG) $(SRCS)
 
 clean:
-	rm -f io
+	rm -f $(TARG)
