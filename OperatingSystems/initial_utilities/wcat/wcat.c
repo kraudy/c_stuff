@@ -39,12 +39,14 @@ int read_file_fgetc(char *name){
 }
 
 int main(int argc, char *argv[]){
-  assert(argc >= 2);
+  if(argc < 2)
+    return 0;
 
   for (int i=1; i<argc; i++){
     //read_file_fgets(argv[i]);
     if (read_file_fgetc(argv[i]))
-      return 0;
+      //return 0;
+      break;
     //printf("\n\n");
   }
 
