@@ -1,0 +1,2 @@
+wcat: wcat.c:42: int main(int, char **): Assertion `argc >= 2' failed.
+../run-tests.sh: line 28: 151730 Aborted                 ./wcat
