@@ -4,7 +4,6 @@
 int find_file(FILE **f, char *name){
   *f = fopen(name, "r");
   if(*f == NULL){
-    //fprintf(stderr, "File not found: %s\n", name);
     return 1;
   }
   return 0;
@@ -15,7 +14,6 @@ int read_file_fgets(char *name){
   if (find_file(&f, name))
     return 1;
 
-  //printf("File: %s\n", name);
   char s[1024];
   while(fgets(s, sizeof s, f) != NULL)
     printf("%s", s);
@@ -29,7 +27,6 @@ int read_file_fgetc(char *name){
   if (find_file(&f, name))
     return 1;
 
-  //printf("File: %s\n", name);
   char c;
   while((c = fgetc(f)) != EOF)
     putchar(c);
@@ -43,11 +40,10 @@ int main(int argc, char *argv[]){
     return 0;
 
   for (int i=1; i<argc; i++){
-    //read_file_fgets(argv[i]);
-    if (read_file_fgetc(argv[i]))
-      //return 0;
-      break;
-    //printf("\n\n");
+    if (read_file_fgetc(argv[i])){
+      fprintf(stdout, "wcat: cannot open file\n");
+      return 1;
+    }
   }
 
   return 0;
