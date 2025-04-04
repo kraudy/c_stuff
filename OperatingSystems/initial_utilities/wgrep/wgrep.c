@@ -18,9 +18,9 @@ int main(int argc, char *argv[]){
   char *line = NULL;
   size_t len = 0;
   if(argc == 2){
-    getline(&line, &len, stdin);
-    if (strstr(line, argv[1]) != NULL)
-      fprintf(stdout, "%s",line);
+    while(getline(&line, &len, stdin) != -1)
+      if (strstr(line, argv[1]) != NULL)
+        fprintf(stdout, "%s",line);
   }
 
   for (int i = 2; i<argc; i++){
