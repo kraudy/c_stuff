@@ -15,9 +15,9 @@ int main(int argc, char *argv[]){
     return 1;
   }
 
-  char c = "";
-  char c_read = "";
+  char current = -1;
   int count = 0;
+
   
   /* read char */
 
@@ -29,23 +29,45 @@ int main(int argc, char *argv[]){
     if(find_file(&fd, argv[i])){
       return 1;
     }
+
+    int c_read;
     while((c_read = fgetc(fd)) != EOF){
-      if(c_read != c){
-        // here do the add
+      if (current == -1){
+        current = c_read;
+        count = 1;
+      }
+      else if(c_read != current){
         size ++;
-        if(realloc(buffer, 5 * size * sizeof(char)) == NULL){
+        buffer = realloc(buffer, 5 * size);
+        if(buffer == NULL){
+          fclose(fd);
+          free(buffer);
           return 1;
         }
-        c = c_read;
-        count = 0;
+        memcpy(buffer + (size - 1) * 5, &count, 4);
+        buffer[(size * 5) - 1] = current;
+        current = c_read;
+        count = 1;
+      } 
+      else{
+        count ++;
       }
-      count ++;
-    } 
+    }
+    // Handle the last run after EOF
+    if (count > 0) {
+        size++;
+        buffer = realloc(buffer, 5 * size);
+        if (buffer == NULL) return 1;
+        memcpy(buffer + (size - 1) * 5, &count, 4);
+        buffer[(size - 1) * 5 + 4] = current;
+    }
     fclose(fd);
   }
 
   /* write */
-  fwrite(buffer, sizeof(char), size, stdout);
+  fwrite(buffer, sizeof(char), 5 * size, stdout);
+
+  free(buffer);
 
   return 0;
 }
