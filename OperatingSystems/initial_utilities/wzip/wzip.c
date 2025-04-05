@@ -32,6 +32,7 @@ int main(int argc, char *argv[]){
 
     int c_read;
     while((c_read = fgetc(fd)) != EOF){
+      /* EOF = -1 so assigning -1 at the start is useful*/
       if (current == -1){
         current = c_read;
         count = 1;
@@ -45,7 +46,7 @@ int main(int argc, char *argv[]){
           return 1;
         }
         memcpy(buffer + (size - 1) * 5, &count, 4);
-        buffer[(size * 5) - 1] = current;
+        buffer[(size - 1) * 5 + 4] = current;
         current = c_read;
         count = 1;
       } 
@@ -53,15 +54,15 @@ int main(int argc, char *argv[]){
         count ++;
       }
     }
-    // Handle the last run after EOF
-    if (count > 0) {
-        size++;
-        buffer = realloc(buffer, 5 * size);
-        if (buffer == NULL) return 1;
-        memcpy(buffer + (size - 1) * 5, &count, 4);
-        buffer[(size - 1) * 5 + 4] = current;
-    }
     fclose(fd);
+  }
+  // Handle the last run after EOF
+  if (count > 0) {
+      size++;
+      buffer = realloc(buffer, 5 * size);
+      if (buffer == NULL) return 1;
+      memcpy(buffer + (size - 1) * 5, &count, 4);
+      buffer[(size - 1) * 5 + 4] = current;
   }
 
   /* write */
