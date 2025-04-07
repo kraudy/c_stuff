@@ -32,18 +32,33 @@ int main(int argc, char *argv[]){
     int c_read;
 
     while(getline(&line, &size, fd) != -1){
-      buffer = realloc(buffer, 5 * size);
+
+      char *saved_buff = buffer;
+      char *saved_line = line;
+
+      int count;
+      memcpy(&count, line, 4);
+      char c = *(line+4);
+
+      // Check this size
+      size += count;
+      buffer = realloc(buffer, size);
       if(buffer == NULL){
         fclose(fd);
         free(buffer);
         free(line);
         return 1;
       }
-      char *savp = buffer;
-      for(int i=0; i<size; i+=5){
-        char c = *(buffer+(4*i));
+
+      for(int i=0; i<count; i++){
+        buffer[i] = c;
       }
-      buffer = savp;
+
+      line += 5;
+      buffer += count;
+
+
+      buffer = saved_buff;
     }
     
 
