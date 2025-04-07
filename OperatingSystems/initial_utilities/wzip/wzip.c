@@ -15,11 +15,8 @@ int main(int argc, char *argv[]){
     return 1;
   }
 
-  char current = -1;
+  char current_read = -1;
   int count = 0;
-
-  
-  /* read char */
 
   unsigned char *buffer = NULL; 
   size_t size = 0;
@@ -33,11 +30,11 @@ int main(int argc, char *argv[]){
     int c_read;
     while((c_read = fgetc(fd)) != EOF){
       /* EOF = -1 so assigning -1 at the start is useful*/
-      if (current == -1){
-        current = c_read;
+      if (current_read == -1){
+        current_read = c_read;
         count = 1;
       }
-      else if(c_read != current){
+      else if(c_read != current_read){
         size ++;
         buffer = realloc(buffer, 5 * size);
         if(buffer == NULL){
@@ -46,8 +43,8 @@ int main(int argc, char *argv[]){
           return 1;
         }
         memcpy(buffer + (size - 1) * 5, &count, 4);
-        buffer[(size - 1) * 5 + 4] = current;
-        current = c_read;
+        buffer[(size * 5) - 1] = current_read;
+        current_read = c_read;
         count = 1;
       } 
       else{
@@ -62,7 +59,7 @@ int main(int argc, char *argv[]){
       buffer = realloc(buffer, 5 * size);
       if (buffer == NULL) return 1;
       memcpy(buffer + (size - 1) * 5, &count, 4);
-      buffer[(size - 1) * 5 + 4] = current;
+      buffer[(size - 1) * 5 + 4] = current_read;
   }
 
   /* write */
