@@ -17,8 +17,10 @@ int main(int argc, char *argv[]){
 
   char current_read = -1;
   int count = 0;
+  
+  char *line = NULL;
+  char *buffer = NULL; 
 
-  unsigned char *buffer = NULL; 
   size_t size = 0;
   /* just multiply each read by 5 bytes since we are usin RLE*/
   for (int i=1; i<argc; i++){
@@ -28,6 +30,23 @@ int main(int argc, char *argv[]){
     }
 
     int c_read;
+
+    while(getline(&line, &size, fd) != -1){
+      buffer = realloc(buffer, 5 * size);
+      if(buffer == NULL){
+        fclose(fd);
+        free(buffer);
+        free(line);
+        return 1;
+      }
+      char *savp = buffer;
+      for(int i=0; i<size; i+=5){
+        char c = *(buffer+(4*i));
+      }
+      buffer = savp;
+    }
+    
+
     while((c_read = fgetc(fd)) != EOF){
       /* EOF = -1 so assigning -1 at the start is useful*/
       if (current_read == -1){
