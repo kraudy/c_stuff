@@ -14,15 +14,10 @@ int main(int argc, char *argv[]){
     fprintf(stdout, "wunzip: file1 [file2 ...]\n");
     return 1;
   }
-
-  //char current_read = -1;
-  //int count = 0;
   
-  char *line = NULL;
   char *buffer = NULL; 
-
-  size_t line_size = 0;
   size_t buffer_size = 0;
+
   /* just multiply each read by 5 bytes since we are usin RLE*/
   for (int i=1; i<argc; i++){
     FILE *fd;
@@ -30,44 +25,32 @@ int main(int argc, char *argv[]){
       return 1;
     }
 
-    //int c_read;
+    int count;
+    char c;
 
-    while(getline(&line, &line_size, fd) != -1){
+    while(fread(&count, sizeof(int), 1, fd) && fread(&c, sizeof(char), 1, fd)){
 
-      //char *saved_buff = buffer;
-      char *saved_line = line;
-
-      while(line < saved_line + line_size){
-        int count;
-        memcpy(&count, line, 4);
-        char c = *(line+4);
-
-        buffer_size += count;
-        buffer = realloc(buffer, buffer_size);
-        if(buffer == NULL){
-          fclose(fd);
-          free(buffer);
-          free(line);
-          return 1;
-        }
-
-        for(int i=0; i<count; i++){
-          buffer[(buffer_size - count) + i] = c;
-        }
-
-        line += 5;
-        //buffer += count;
+      size_t new_size = buffer_size + count;
+      if ((buffer = realloc(buffer, new_size)) == NULL) {
+        fclose(fd);
+        free(buffer);
+        return 1;
       }
-      free(saved_line);
 
-      //buffer = saved_buff;
+      // Fill the new portion with the character
+      memset(buffer + buffer_size, c, count);
+      buffer_size = new_size;
     }
 
-    fprintf(stdout, "%s", buffer);
-    
-    free(buffer);
-
-  return 0;
+    fclose(fd);
   }
+
+  if (buffer_size > 0) {
+    fwrite(buffer, 1, buffer_size, stdout);
+  }
+    
+  free(buffer);
+  
+  return 0;
 }
 
