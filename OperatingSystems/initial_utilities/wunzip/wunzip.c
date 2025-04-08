@@ -21,7 +21,8 @@ int main(int argc, char *argv[]){
   char *line = NULL;
   char *buffer = NULL; 
 
-  size_t size = 0;
+  size_t line_size = 0;
+  size_t buffer_size = 0;
   /* just multiply each read by 5 bytes since we are usin RLE*/
   for (int i=1; i<argc; i++){
     FILE *fd;
@@ -31,75 +32,40 @@ int main(int argc, char *argv[]){
 
     int c_read;
 
-    while(getline(&line, &size, fd) != -1){
+    while(getline(&line, &line_size, fd) != -1){
 
       char *saved_buff = buffer;
       char *saved_line = line;
 
-      int count;
-      memcpy(&count, line, 4);
-      char c = *(line+4);
+      while(line < saved_line + line_size){
+        int count;
+        memcpy(&count, line, 4);
+        char c = *(line+4);
 
-      // Check this size
-      size += count;
-      buffer = realloc(buffer, size);
-      if(buffer == NULL){
-        fclose(fd);
-        free(buffer);
-        free(line);
-        return 1;
-      }
-
-      for(int i=0; i<count; i++){
-        buffer[i] = c;
-      }
-
-      line += 5;
-      buffer += count;
-
-
-      buffer = saved_buff;
-    }
-    
-
-    while((c_read = fgetc(fd)) != EOF){
-      /* EOF = -1 so assigning -1 at the start is useful*/
-      if (current_read == -1){
-        current_read = c_read;
-        count = 1;
-      }
-      else if(c_read != current_read){
-        size ++;
-        buffer = realloc(buffer, 5 * size);
+        buffer_size += count;
+        buffer = realloc(buffer, buffer_size);
         if(buffer == NULL){
           fclose(fd);
           free(buffer);
+          free(line);
           return 1;
         }
-        memcpy(buffer + (size - 1) * 5, &count, 4);
-        buffer[(size * 5) - 1] = current_read;
-        current_read = c_read;
-        count = 1;
-      } 
-      else{
-        count ++;
+
+        for(int i=0; i<count; i++){
+          buffer[(buffer_size - count) + i] = c;
+        }
+
+        line += 5;
+        //buffer += count;
       }
+      free(line);
+
+      //buffer = saved_buff;
     }
-    fclose(fd);
-  }
-  // Handle the last run after EOF
-  if (count > 0) {
-      size++;
-      buffer = realloc(buffer, 5 * size);
-      if (buffer == NULL) return 1;
-      memcpy(buffer + (size - 1) * 5, &count, 4);
-      buffer[(size - 1) * 5 + 4] = current_read;
-  }
 
-  /* write */
-  fwrite(buffer, sizeof(char), 5 * size, stdout);
-
-  free(buffer);
+    fprintf(stdout, "%s", buffer);
+    
+    free(buffer);
 
   return 0;
 }
