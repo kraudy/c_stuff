@@ -29,7 +29,6 @@ int main(int argc, char *argv[]){
     char c;
 
     while(fread(&count, sizeof(int), 1, fd) && fread(&c, sizeof(char), 1, fd)){
-
       size_t new_size = buffer_size + count;
       if ((buffer = realloc(buffer, new_size)) == NULL) {
         fclose(fd);
