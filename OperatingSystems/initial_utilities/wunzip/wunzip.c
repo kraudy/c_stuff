@@ -15,8 +15,8 @@ int main(int argc, char *argv[]){
     return 1;
   }
 
-  char current_read = -1;
-  int count = 0;
+  //char current_read = -1;
+  //int count = 0;
   
   char *line = NULL;
   char *buffer = NULL; 
@@ -30,11 +30,11 @@ int main(int argc, char *argv[]){
       return 1;
     }
 
-    int c_read;
+    //int c_read;
 
     while(getline(&line, &line_size, fd) != -1){
 
-      char *saved_buff = buffer;
+      //char *saved_buff = buffer;
       char *saved_line = line;
 
       while(line < saved_line + line_size){
@@ -58,7 +58,7 @@ int main(int argc, char *argv[]){
         line += 5;
         //buffer += count;
       }
-      free(line);
+      free(saved_line);
 
       //buffer = saved_buff;
     }
@@ -68,7 +68,6 @@ int main(int argc, char *argv[]){
     free(buffer);
 
   return 0;
+  }
 }
-
-
 
